@@ -1,0 +1,26 @@
+# deps / builds
+node_modules/
+dist/
+build/
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vite/
+.cache/
+.eslintcache
+
+# env
+.env
+.env.local
+.env.*.local
+
+# macOS / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# lockfiles (оставь свой один, если нужен)
+# pnpm-lock.yaml
+# yarn.lock
