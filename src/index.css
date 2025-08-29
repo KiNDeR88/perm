@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Подключаем шрифты */
+@import url("https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@400;500;600;700&display=swap");
+
+/* Если DIN Condensed есть локально — возьмём его (иначе fallback из tailwind.config.js) */
+@font-face {
+  font-family: "DIN Condensed";
+  src: local("DIN Condensed"), local("DINCondensed");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Базовые фирменные стили */
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    @apply bg-[color:var(--bg-color)] text-[#111] font-sofia;
+  }
+  h1, h2, .heading {
+    @apply font-din tracking-wider;
+  }
+  :root {
+    --brand-blue: #243369;
+    --brand-red:  #DE2A1B;
+    --bg-color:   #EEEEEE;
+  }
+}
+
+/* Единые состояния инпутов и кнопок */
+@layer components {
+  .ipt {
+    @apply w-full border rounded p-2 bg-white
+           focus:outline-none focus:ring-2 focus:ring-[var(--brand-blue)];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3
+           font-semibold transition text-white
+           focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  .btn-primary {
+    @apply bg-[var(--brand-red)] hover:brightness-110 focus:ring-[var(--brand-red)];
+  }
+  .btn-secondary {
+    @apply bg-[var(--brand-blue)] hover:brightness-110 focus:ring-[var(--brand-blue)];
+  }
+  .btn-ghost {
+    @apply bg-white text-zinc-900 border border-zinc-200 hover:bg-zinc-50 focus:ring-zinc-400;
+  }
+}
