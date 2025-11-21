@@ -1,3 +1,33 @@
+/**
+ * ==============================================
+ * PremiumBonus API Client
+ * ==============================================
+ * Этот модуль инкапсулирует все обращения к API PremiumBonus.
+ * Используется на фронтенде (например, в App.jsx) для работы
+ * с регистрацией пользователей и выпуском электронных карт.
+ *
+ * Основные функции:
+ *  - buyerInfo(phone): проверяет, зарегистрирован ли покупатель.
+ *  - sendRegisterCode(phone): отправляет SMS-код для регистрации.
+ *  - sendCustomCode(phone, text): отправляет кастомный код (например, для входа).
+ *  - verifyConfirmationCode({phone, code}): подтверждает SMS-код.
+ *  - buyerRegister(payload): регистрирует нового пользователя.
+ *  - cardGetInfo({phone, design_id}): получает ссылку или файл для добавления карты
+ *    (Apple Wallet / Passes Wallet / Google Pay).
+ *
+ * Вспомогательные функции:
+ *  - normalizePhonePB(): приводит телефон к формату 7XXXXXXXXXX.
+ *  - http(): общий POST-запрос с обработкой ошибок PremiumBonus API.
+ *
+ * Возвращаемые данные cardGetInfo() унифицируются для работы с разными форматами:
+ * {
+ *   url,            // ссылка на e-карту или кошелёк
+ *   fileBase64,     // файл карты (если доступен)
+ *   mime, filename, // информация о типе и имени файла
+ *   applications,   // рекомендованные приложения (например, PassesWallet)
+ *   raw             // оригинальный ответ сервера
+ * }
+ */
 const BASE = import.meta.env.VITE_PB_BASE_URL;
 
 function assertEnv() {

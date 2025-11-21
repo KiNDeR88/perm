@@ -11,24 +11,38 @@ import {
 
 import LogoImg from "./assets/icon@0.5x.png";
 
+// Бейджи-картинки (убедись, что файлы реально лежат в /src/assets)
+import AppleWalletBadgeImg from "./assets/add-to-apple-wallet-badge.png";
+import AppStoreBadgeImg from "./assets/app-store.png";
+import GooglePlayBadgeRu from "./assets/google_play_app.png";
+import PassesWalletBadge from "./assets/passeswallet.jpg";
+
 /* ============== UI helpers ============== */
-const AppleIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-    <path d="M16.365 1.43c.02 1.2-.44 2.12-1.19 2.93-.77.83-1.92 1.35-3.07 1.26-.14-1.16.43-2.3 1.13-3.06.78-.86 2.05-1.47 3.13-1.13zM20.41 17.06c-.59 1.37-.88 1.98-1.65 3.2-1.07 1.65-2.59 3.7-4.45 3.72-1.66.02-2.09-1.1-4.35-1.1-2.27 0-2.74 1.08-4.42 1.12-1.83.04-3.23-1.78-4.3-3.42-2.35-3.6-4.13-10.2-1.72-14.65 1.2-2.2 3.35-3.58 5.67-3.62 1.77-.04 3.45 1.2 4.35 1.2.89 0 2.98-1.48 5.02-1.26.85.04 3.24.34 4.77 2.57-3.89 2.11-3.27 7.64.08 9.24-.41.98-.88 1.78-1 1.99z"/>
-  </svg>
-);
+
+// Иконки для кнопок (используются в ветке "other")
 const GooglePlayIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-    <path d="M3.6 1.8c-.5.3-.8.9-.8 1.6v17.2c0 .7.3 1.3.8 1.6l10.6-10.2L3.6 1.8zm12.2 9.6 2.7-2.6c1.1-1 1.6-1.6 1.6-2.4 0-.8-.5-1.4-1.6-2.4L16.7 2l-4.1 4 3.2 3.4zM12.6 18 16.7 22l2.4-1.9c1.1-1 1.6-1.6 1.6-2.4 0-.8-.5-1.4-1.6-2.4l-2.7-2.6-3.8 3.3z"/>
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+    <path d="M3.6 1.8c-.5.3-.8.9-.8 1.6v17.2c0 .7.3 1.3.8 1.6l10.6-10.2L3.6 1.8z"/>
+    <path d="M15.8 11.4 18.5 8.8c1.1-1 1.6-1.6 1.6-2.4 0-.8-.5-1.4-1.6-2.4L16.7 2l-4.1 4 3.2 3.4z"/>
+    <path d="M12.6 18 16.7 22l2.4-1.9c1.1-1 1.6-1.6 1.6-2.4 0-.8-.5-1.4-1.6-2.4l-2.7-2.6-3.8 3.3z"/>
   </svg>
 );
 const WalletIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
     <path d="M2 7a3 3 0 0 1 3-3h11a1 1 0 1 1 0 2H5a1 1 0 0 0-1 1v1h17a2 2 0 0 1 2 2v7a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V7zm19 4H15a2 2 0 0 0 0 4h6v-4z"/>
   </svg>
 );
 
-const Button = ({ children, onClick, variant = "primary", disabled = false, as = "button", href }) => {
+// Кнопка-контрол
+const Button = ({
+  children,
+  onClick,
+  variant = "primary",
+  disabled = false,
+  as = "button",
+  href,
+  className = "",
+}) => {
   const base =
     "inline-flex items-center justify-center gap-2 w-full rounded-xl px-4 py-3 text-sm font-semibold transition " +
     "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
@@ -40,19 +54,43 @@ const Button = ({ children, onClick, variant = "primary", disabled = false, as =
     black:     "bg-black text-white hover:bg-zinc-900 focus-visible:ring-black",
   }[variant];
 
+  const cls = `${base} ${styles} ${className}`.trim();
+
   if (as === "a" && href) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={`${base} ${styles} no-underline text-center`}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={`${cls} no-underline text-center`}>
         {children}
       </a>
     );
   }
   return (
-    <button onClick={onClick} disabled={disabled} className={`${base} ${styles} disabled:opacity-60 disabled:cursor-not-allowed`}>
+    <button onClick={onClick} disabled={disabled} className={`${cls} disabled:opacity-60 disabled:cursor-not-allowed`}>
       {children}
     </button>
   );
 };
+
+// «Кнопка»-бейдж (картинка): className — для оболочки, imgClass — для самого изображения
+const BadgeLink = ({ href, onClick, src, alt, className = "", imgClass = "h-20 sm:h-24" }) => (
+  <a
+    href={href}
+    onClick={onClick}
+    target={href ? "_blank" : undefined}
+    rel={href ? "noopener noreferrer" : undefined}
+    className={`inline-block align-middle ${className}`}
+    aria-label={alt}
+    style={{ lineHeight: 0 }}
+  >
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      className={`${imgClass} block w-auto object-contain`}
+      style={{ display: 'block' }}
+    />
+  </a>
+);
 
 /* ============== Utils ============== */
 const normalizeOtp = (s = "") => s.replace(/\s+/g, "");
@@ -62,6 +100,7 @@ const maskPhone = (phone = "") => {
   return digits.replace(/(\+?\d{1,3})(\d{3})(\d{2})(.*)/, "$1 *** ** $4").trim();
 };
 const formatCard = (s = "") => String(s).replace(/(.{4})/g, "$1 ").trim();
+
 const isBuyerExists = (info) =>
   info?.is_register === true ||
   info?.is_registered === true ||
@@ -70,14 +109,36 @@ const isBuyerExists = (info) =>
   info?.status === "registered" ||
   (info?.success === true && (info?.card_number || info?.buyer?.card_number));
 
+// Определение платформы (с поддержкой UA-CH)
+function getPlatform() {
+  if (typeof navigator === "undefined") return "other";
+  if (navigator.userAgentData?.platform) {
+    const p = navigator.userAgentData.platform.toLowerCase();
+    if (p.includes("android")) return "android";
+    if (p.includes("ios") || p.includes("iphone") || p.includes("ipad") || p.includes("macos") || p.includes("mac")) {
+      if (p.includes("mac") && navigator.maxTouchPoints > 1) return "ios";
+      return p.includes("mac") ? "other" : "ios";
+    }
+  }
+  const ua = navigator.userAgent || navigator.vendor || "";
+  const iOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const android = /Android/i.test(ua);
+  if (iOS) return "ios";
+  if (android) return "android";
+  return "other";
+}
+
 /* ============== Env ============== */
 const CARD_DESIGN_ID = import.meta.env.VITE_CARD_DESIGN_ID || "default";
 const APPSTORE_URL   = import.meta.env.VITE_APPSTORE_URL   || "";
 const GOOGLEPLAY_URL = import.meta.env.VITE_GOOGLEPLAY_URL || "";
+const TERMS_URL      = import.meta.env.VITE_TERMS_URL      || "#";
+const PRIVACY_URL    = import.meta.env.VITE_PRIVACY_URL    || "#";
 
 /* ============== Component ============== */
 export default function App() {
   const year = useMemo(() => new Date().getFullYear(), []);
+  const platform = useMemo(() => getPlatform(), []);
   const [form, setForm] = useState({
     phone: "",
     first_name: "",
@@ -85,7 +146,7 @@ export default function App() {
     email: "",
     terms: false,
     promo: false,
-    token: "", // номер карты из ?t=
+    token: "",
   });
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState("fill"); // fill | otp-register | otp-login | done
@@ -93,10 +154,9 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [profile, setProfile] = useState(null);
-
   const [cardNumber, setCardNumber] = useState("");
 
-  // читаем t из URL
+  // Берём t= из URL (номер карты/токен) и показываем в readOnly поле
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("t") || "";
@@ -175,7 +235,7 @@ export default function App() {
           marketing_consent: !!form.promo,
           card_number: (form.token || "").trim() || undefined,
           token: form.token || undefined,
-          code, // ряд инсталляций PB требует код и тут
+          code,
         };
 
         console.log("[PB] buyer-register → payload", payload);
@@ -212,7 +272,7 @@ export default function App() {
     }
   };
 
-  // Загрузка e-карты (унифицирована под разные ответы card-get-info)
+  // Скачать/получить e-карту
   const downloadECard = async () => {
     if (!profile) {
       setStatus({ type: "error", text: "Сначала завершите регистрацию (подтвердите код)." });
@@ -223,46 +283,62 @@ export default function App() {
 
     try {
       const data = await cardGetInfo({ phone: form.phone, design_id: CARD_DESIGN_ID });
+      const result = data?.result || data;
 
-      // 1) Прямая ссылка (wallet_link/gpay_link/ и т.п.)
-      if (data?.url) {
-        window.open(data.url, "_blank", "noopener,noreferrer");
-        setStatus({ type: "ok", text: "Ссылка на карту открыта в новой вкладке." });
+      const url =
+        result?.wallet_link ||
+        result?.gpay_link ||
+        result?.url ||
+        result?.download_url ||
+        result?.link ||
+        result?.pkpass_url ||
+        result?.googlepay_url;
+
+      // Открываем прямую ссылку на e-карту
+      if (url) {
+        if (platform === "android") {
+          // На Android Passes Wallet обычно перехватывает deep-link сам
+          window.location.href = url;
+          setStatus({ type: "ok", text: "Открываем Passes Wallet (или Google Play)..." });
+        } else {
+          window.open(url, "_blank", "noopener,noreferrer");
+          setStatus({ type: "ok", text: "Ссылка на карту открыта в новой вкладке." });
+        }
+        setDownloading(false);
         return;
       }
 
-      // 2) Файл base64 (pkpass)
-      if (data?.fileBase64) {
+      const fileB64 = result?.fileBase64 || result?.file_base64 || result?.file;
+      if (fileB64) {
         const mime =
-          data?.mime ||
-          (data.fileBase64.startsWith("UEtwYXNz")
+          result?.mime ||
+          (fileB64.startsWith("UEtwYXNz")
             ? "application/vnd.apple.pkpass"
             : "application/octet-stream");
-        const bin = atob(data.fileBase64);
+        const bin = atob(fileB64);
         const bytes = new Uint8Array(bin.length);
         for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
         const blob = new Blob([bytes], { type: mime });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = data?.filename || (mime.includes("pkpass") ? "card.pkpass" : "card.bin");
+        a.download = result?.filename || (mime.includes("pkpass") ? "card.pkpass" : "card.bin");
         document.body.appendChild(a);
         a.click();
         a.remove();
         setStatus({ type: "ok", text: "Карта загружена." });
+        setDownloading(false);
         return;
       }
 
-      // 3) Подсказка по приложениям (Android кошельки)
-      if (data?.applications?.length) {
-        const first = data.applications[0];
+      if (result?.applications?.length) {
+        const first = result.applications[0];
         setStatus({
           type: "error",
           text:
             "Не удалось открыть ссылку кошелька. Установите рекомендованное приложение: " +
-            (first?.url || first?.name || "кошелёк"),
+            (first?.url || first?.name || "Passes Wallet"),
         });
-        // Можно сразу открыть маркет:
-        // if (first?.url) window.open(first.url, "_blank", "noopener,noreferrer");
+        setDownloading(false);
         return;
       }
 
@@ -278,13 +354,14 @@ export default function App() {
   const phoneMasked = maskPhone(form.phone);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#EEEEEE] p-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#EEEEEE] p-4 sm:p-6">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 ring-1 ring-black/5">
+        {/* Большой логотип */}
         <div className="flex justify-center mb-5">
-          <img src={LogoImg} alt="Invest In Perm" className="h-16 w-auto" />
+          <img src={LogoImg} alt="Invest In Perm" className="h-40 sm:h-48 md:h-56 lg:h-64 w-auto" />
         </div>
 
-        <h1 className="text-2xl font-bold mb-4 text-center uppercase tracking-wider text-[#243369]">
+        <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-center uppercase tracking-wider text-[#243369]">
           Регистрация в программе лояльности
         </h1>
 
@@ -298,6 +375,7 @@ export default function App() {
           </div>
         )}
 
+        {/* Шаг 1: форма */}
         {step === "fill" && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
@@ -347,11 +425,40 @@ export default function App() {
 
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" name="terms" checked={form.terms} onChange={handleChange} />
-              <span>Согласен с условиями программы</span>
+              <span>
+                Согласен с{" "}
+                <a
+                  href={TERMS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#243369] underline underline-offset-2"
+                >
+                  условиями программы
+                </a>{" "}
+                и{" "}
+                <a
+                  href={PRIVACY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#243369] underline underline-offset-2"
+                >
+                  политикой обработки персональных данных
+                </a>
+              </span>
             </label>
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" name="promo" checked={form.promo} onChange={handleChange} />
-              <span>Хочу получать акции и предложения</span>
+              <span>
+                Хочу получать акции и предложения в соответствии с{" "}
+                <a
+                  href={PRIVACY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#243369] underline underline-offset-2"
+                >
+                  политикой обработки персональных данных
+                </a>
+              </span>
             </label>
 
             <Button variant="primary" disabled={loading}>
@@ -360,6 +467,7 @@ export default function App() {
           </form>
         )}
 
+        {/* Шаг 2: подтверждение кода */}
         {(step === "otp-register" || step === "otp-login") && (
           <div className="space-y-4">
             <input
@@ -385,19 +493,20 @@ export default function App() {
           </div>
         )}
 
+        {/* Шаг 3: финальный экран */}
         {step === "done" && (
           <div className="space-y-4">
-            <div className="rounded-2xl p-5 bg-[#243369] text-white shadow-xl ring-1 ring-white/10 relative overflow-hidden">
-              <img src={LogoImg} alt="Invest In Perm" className="absolute right-3 top-3 h-6 w-auto opacity-90" />
+            {/* Карточка (без логотипа на самой карте) */}
+            <div className="rounded-2xl p-4 sm:p-5 bg-[#243369] text-white shadow-xl ring-1 ring-white/10 relative overflow-hidden">
               <svg className="absolute -right-4 -top-4 w-28 h-28 text-white/10" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M5 12h10l-3.5-3.5L13 7l6 5-6 5-1.5-1.5L15 12H5z" />
               </svg>
               <div className="text-xs uppercase tracking-widest opacity-90">Investor Card</div>
-              <div className="text-2xl tracking-wide mt-1">
+              <div className="text-xl sm:text-2xl tracking-wide mt-1">
                 {profile?.buyer?.name || form.first_name || "Пользователь"}
               </div>
               <div className="text-sm opacity-90 mt-1">{phoneMasked}</div>
-              <div className="mt-4 font-mono text-[1.25rem] tracking-widest">
+              <div className="mt-3 sm:mt-4 font-mono text-base sm:text-[1.25rem] tracking-widest">
                 {formatCard(cardNumber || "—")}
               </div>
               <div className="mt-4 inline-flex items-center gap-2 bg-[#DE2A1B] text-white px-3 py-1 rounded-md text-xs uppercase tracking-wider">
@@ -406,34 +515,84 @@ export default function App() {
               </div>
             </div>
 
+            {/* Платформенные бейджи/кнопки */}
             <div className="space-y-3 mt-3">
-              <Button onClick={downloadECard} disabled={downloading || !isBuyerExists(profile)} variant="black">
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-sm bg-[#DE2A1B] text-white">
-                  <WalletIcon />
-                </span>
-                {downloading ? "Готовим карту…" : "Добавить в кошелёк / скачать e-карту"}
-              </Button>
-
-              {(APPSTORE_URL || GOOGLEPLAY_URL) && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* iOS — два больших бейджа, горизонтально */}
+              {platform === "ios" && (
+                <div className="flex items-center justify-center gap-4">
+                  <BadgeLink
+                    onClick={downloadECard}
+                    src={AppleWalletBadgeImg}
+                    alt="Add to Apple Wallet"
+                    imgClass="h-20 sm:h-24"
+                  />
                   {APPSTORE_URL && (
-                    <Button as="a" href={APPSTORE_URL} variant="store">
-                      <AppleIcon />
-                      Открыть в App Store
-                    </Button>
-                  )}
-                  {GOOGLEPLAY_URL && (
-                    <Button as="a" href={GOOGLEPLAY_URL} variant="play">
-                      <GooglePlayIcon />
-                      Открыть в Google Play
-                    </Button>
+                    <BadgeLink
+                      href={APPSTORE_URL}
+                      src={AppStoreBadgeImg}
+                      alt="Download on the App Store"
+                      imgClass="h-20 sm:h-24"
+                    />
                   )}
                 </div>
               )}
 
+              {/* ANDROID — аккуратные графические бейджи горизонтально */}
+              {platform === "android" && (
+                <div className="flex items-center justify中心 gap-4">
+                  <BadgeLink
+                    onClick={downloadECard}
+                    src={PassesWalletBadge}
+                    alt="Add to Passes Wallet"
+                    imgClass="h-20 sm:h-24"
+                  />
+                  {GOOGLEPLAY_URL && (
+                    <BadgeLink
+                      href={GOOGLEPLAY_URL}
+                      src={GooglePlayBadgeRu}
+                      alt="Доступно в Google Play"
+                      imgClass="h-20 sm:h-24"
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* Desktop/Other — чёрная кнопка + при наличии бейджи магазинов */}
+              {platform === "other" && (
+                <>
+                  <Button onClick={downloadECard} variant="black">Скачать электронную карту</Button>
+
+                  {(APPSTORE_URL || GOOGLEPLAY_URL) && (
+                    <div className="flex items-center justify-center gap-4">
+                      {APPSTORE_URL && (
+                        <BadgeLink
+                          href={APPSTORE_URL}
+                          src={AppStoreBadgeImg}
+                          alt="Download on the App Store"
+                          imgClass="h-20 sm:h-24"
+                        />
+                      )}
+                      {GOOGLEPLAY_URL && (
+                        <Button as="a" href={GOOGLEPLAY_URL} variant="play" className="!w-auto">
+                          <GooglePlayIcon />
+                          Открыть в Google&nbsp;Play
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+
               <p className="text-xs text-zinc-500 text-center">
-                На iOS будет скачан файл <span className="font-mono">.pkpass</span> для Apple Wallet.
-                На Android — ссылка для Google Wallet/Pay (или из рекомендованных приложений).
+                {platform === "ios" && (
+                  <>Скачается файл <span className="font-mono">.pkpass</span> для Apple Wallet.</>
+                )}
+                {platform === "android" && (
+                  <>Откроется Passes Wallet. Если приложение не установлено, откроется Google Play для установки.</>
+                )}
+                {platform === "other" && (
+                  <>Будет загружен файл e-карты. Откройте его в совместимом приложении.</>
+                )}
               </p>
             </div>
           </div>

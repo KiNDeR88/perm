@@ -1,9 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@400;500;600;700&display=swap");
+
+/* Tailwind layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Подключаем шрифты */
-@import url("https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@400;500;600;700&display=swap");
 
 /* Если DIN Condensed есть локально — возьмём его (иначе fallback из tailwind.config.js) */
 @font-face {
@@ -50,4 +50,8 @@
   .btn-ghost {
     @apply bg-white text-zinc-900 border border-zinc-200 hover:bg-zinc-50 focus:ring-zinc-400;
   }
+}
+
+.badge-img {
+  @apply h-12 w-auto object-contain mx-auto rounded-lg shadow-md transition hover:scale-105 cursor-pointer;
 }

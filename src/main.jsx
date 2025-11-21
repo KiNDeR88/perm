@@ -1,10 +1,7 @@
+// src/main.jsx
 import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./index.css";  // <-- обязательно подключить Tailwind
+import { createRoot } from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css"; // если используешь tailwind/стили
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+createRoot(document.getElementById("root")).render(<App />);
